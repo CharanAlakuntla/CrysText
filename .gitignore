@@ -1,0 +1,47 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+*.env
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Dataset — CIF and ExtXYZ files are large, exclude from git
+dataset/cif_files/*.cif
+dataset/cif_files/*.xyz
+dataset/cif_files/*.extxyz
+
+# MongoDB data
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+*.log.*
+
+# Test files
+backend/test_extxyz.py
+backend/check_coords.py

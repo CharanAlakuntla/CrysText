@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface-700/50 backdrop-blur-md border border-white/8;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-white to-primary-400 bg-clip-text text-transparent;
+  }
+}

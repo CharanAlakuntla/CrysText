@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: crystext-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: crystext
+
+  backend:
+    build: ./backend
+    container_name: crystext-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_URL: mongodb://mongodb:27017
+      MONGODB_DB: crystext
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-mistral}
+      CIF_FOLDER: /app/dataset/cif_files
+      CORS_ORIGINS: http://localhost:3000,http://localhost:80
+    volumes:
+      - ./dataset:/app/dataset:ro
+
+  frontend:
+    build: ./frontend
+    container_name: crystext-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:

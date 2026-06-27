@@ -3,61 +3,82 @@
 @tailwind utilities;
 
 @layer base {
-  /* ── Dark mode (default) ───────────────────── */
-  :root {
-    --bg: #0c0e12;
-    --nav-bg: rgba(16,20,30,0.8);
-    --card-bg: rgba(26,32,48,0.55);
-    --border: rgba(255,255,255,0.08);
-    --text: #f3f4f6;
-    --text-muted: #9ca3af;
-    --surface-800: #10141e;
-    --surface-700: #1a2030;
+  /* Dark mode variables (default) */
+  html.dark, html {
+    --bg-primary: #0c0e12;
+    --bg-nav: rgba(16,20,30,0.85);
+    --bg-card: rgba(26,32,48,0.55);
+    --bg-card-solid: #1a2030;
+    --bg-input: rgba(255,255,255,0.03);
+    --border-col: rgba(255,255,255,0.08);
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-tertiary: #6b7280;
   }
 
-  /* ── Light mode ────────────────────────────── */
+  /* Light mode variables */
   html:not(.dark) {
-    --bg: #f1f5f9;
-    --nav-bg: rgba(255,255,255,0.9);
-    --card-bg: rgba(255,255,255,0.9);
-    --border: rgba(0,0,0,0.08);
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --surface-800: #e2e8f0;
-    --surface-700: #f8fafc;
+    --bg-primary: #f0f4f8;
+    --bg-nav: rgba(255,255,255,0.92);
+    --bg-card: rgba(255,255,255,0.9);
+    --bg-card-solid: #ffffff;
+    --bg-input: rgba(0,0,0,0.03);
+    --border-col: rgba(0,0,0,0.10);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #94a3b8;
   }
 
   body {
     @apply font-sans antialiased;
-    background-color: var(--bg);
-    color: var(--text);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
-  /* Apply light mode bg overrides */
-  html:not(.dark) .bg-surface-900 { background-color: #f1f5f9 !important; }
-  html:not(.dark) .bg-surface-800\/80 { background-color: rgba(255,255,255,0.9) !important; }
-  html:not(.dark) .bg-surface-700\/50 { background-color: rgba(255,255,255,0.85) !important; }
-  html:not(.dark) .bg-surface-700\/40 { background-color: rgba(241,245,249,0.9) !important; }
-  html:not(.dark) .bg-surface-800\/60 { background-color: rgba(226,232,240,0.8) !important; }
-  html:not(.dark) .bg-surface-800 { background-color: #e2e8f0 !important; }
-  html:not(.dark) .bg-surface-900\/60 { background-color: rgba(241,245,249,0.8) !important; }
+  /* Global surface overrides via CSS vars */
+  html:not(.dark) body,
+  html:not(.dark) #root {
+    background-color: var(--bg-primary);
+  }
 
-  /* Text overrides in light mode */
-  html:not(.dark) .text-gray-100 { color: #0f172a !important; }
-  html:not(.dark) .text-gray-200 { color: #1e293b !important; }
-  html:not(.dark) .text-gray-300 { color: #334155 !important; }
-  html:not(.dark) .text-gray-400 { color: #475569 !important; }
-  html:not(.dark) .text-gray-500 { color: #64748b !important; }
+  html:not(.dark) nav,
+  html:not(.dark) .nav-bar {
+    background-color: var(--bg-nav) !important;
+    border-color: var(--border-col) !important;
+  }
 
-  /* Border overrides */
-  html:not(.dark) .border-white\/8 { border-color: rgba(0,0,0,0.08) !important; }
-  html:not(.dark) .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
-  html:not(.dark) .border-white\/5 { border-color: rgba(0,0,0,0.05) !important; }
+  /* Card backgrounds */
+  html:not(.dark) [class*="bg-surface"] {
+    background-color: var(--bg-card) !important;
+  }
+
+  /* Text */
+  html:not(.dark) [class*="text-gray-1"],
+  html:not(.dark) [class*="text-gray-2"],
+  html:not(.dark) [class*="text-gray-3"] {
+    color: var(--text-primary) !important;
+  }
+  html:not(.dark) [class*="text-gray-4"],
+  html:not(.dark) [class*="text-gray-5"] {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Borders */
+  html:not(.dark) [class*="border-white"] {
+    border-color: var(--border-col) !important;
+  }
+
+  /* Inputs */
+  html:not(.dark) input,
+  html:not(.dark) textarea {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-input) !important;
+  }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
+  ::-webkit-scrollbar-thumb { border-radius: 9999px; background: rgba(128,128,128,0.3); }
 }
 
 @layer utilities {

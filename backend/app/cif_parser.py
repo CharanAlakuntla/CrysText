@@ -15,7 +15,6 @@ def parse_cif_file(cif_path: str) -> Optional[Dict[str, Any]]:
     try:
         from pymatgen.core import Structure
         from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-
         structure = Structure.from_file(cif_path)
         analyzer = SpacegroupAnalyzer(structure)
         sym_structure = analyzer.get_symmetrized_structure()

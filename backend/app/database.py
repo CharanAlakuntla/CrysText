@@ -1,7 +1,8 @@
+import logging
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import IndexModel, ASCENDING, TEXT
 from app.config import settings
-import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -12,19 +13,20 @@ db = None
 async def connect_db():
     global client, db
     import certifi
-    # Use certifi CA bundle for Atlas SSL compatibility
     client = AsyncIOMotorClient(
         settings.mongodb_url,
         tlsCAFile=certifi.where(),
-        serverSelectionTimeoutMS=30000,
-        connectTimeoutMS=30000,
-        socketTimeoutMS=30000,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=5000,
+        socketTimeoutMS=5000,
     )
     db = client[settings.mongodb_db]
-    # Test connection before proceeding
-    await client.admin.command("ping")
-    await create_indexes()
-    logger.info(f"Connected to MongoDB: {settings.mongodb_db}")
+    logger.info(f"MongoDB client created for: {settings.mongodb_db}")
+    # Create indexes in background - don't block startup
+    try:
+        await asyncio.wait_for(create_indexes(), timeout=10.0)
+    except Exception as e:
+        logger.warning(f"Index creation skipped: {e}")
 
 
 async def close_db():

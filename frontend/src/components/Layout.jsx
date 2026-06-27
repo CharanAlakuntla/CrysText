@@ -19,14 +19,26 @@ export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  // Sync dark mode to html element on mount and change
+  const applyDarkMode = (dark) => {
+    if (dark) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
+  };
+
+  // Apply on mount
+  useState(() => { applyDarkMode(darkMode); });
+
+  const handleToggleDark = () => {
+    toggleDarkMode();
+    applyDarkMode(!darkMode);
+  };
     logout();
     toast("Signed out");
     navigate("/login");
   };
 
   return (
-    <div className={clsx("min-h-screen bg-surface-900", darkMode ? "dark" : "")}>
+    <div className="min-h-screen bg-surface-900 text-gray-100">
       {/* Top Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-surface-800/80 backdrop-blur-md border-b border-white/8 flex items-center px-4 gap-4">
         {/* Logo */}
@@ -61,7 +73,7 @@ export default function Layout() {
 
         <div className="flex items-center gap-2 ml-auto">
           <button
-            onClick={toggleDarkMode}
+            onClick={handleToggleDark}
             className="p-2 rounded-lg text-gray-400 hover:text-gray-100 hover:bg-white/5 transition-colors"
             aria-label="Toggle dark mode"
           >

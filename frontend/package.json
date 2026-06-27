@@ -32,6 +32,6 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "serve dist -l ${PORT:-3000} --config serve.json"
+    "start": "npx serve dist -l ${PORT:-3000} --no-clipboard"
   }
 }

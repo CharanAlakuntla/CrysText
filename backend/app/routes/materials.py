@@ -197,15 +197,64 @@ async def compare_materials(req: CompareRequest):
 async def download_cif(formula: str):
     db = get_db()
     doc = await db["materials"].find_one({"formula": {"$regex": f"^{formula}$", "$options": "i"}})
-    if not doc or not doc.get("cif_content"):
-        raise HTTPException(status_code=404, detail="CIF not found")
+    if not doc:
+        raise HTTPException(status_code=404, detail="Material not found")
 
-    content = doc["cif_content"].encode("utf-8")
+    # Use stored CIF content if available
+    if doc.get("cif_content"):
+        content = doc["cif_content"].encode("utf-8")
+    else:
+        # Generate CIF from stored structure data
+        content = _generate_cif(doc).encode("utf-8")
+
     return StreamingResponse(
         io.BytesIO(content),
         media_type="chemical/x-cif",
         headers={"Content-Disposition": f"attachment; filename={formula}.cif"}
     )
+
+
+def _generate_cif(doc: dict) -> str:
+    """Generate a minimal valid CIF file from stored material data."""
+    formula = doc.get("formula", "Unknown")
+    lat = doc.get("lattice") or {}
+    sites = doc.get("sites") or []
+    sg = doc.get("space_group", "P 1")
+    cs = doc.get("crystal_system", "triclinic")
+
+    lines = [
+        f"data_{formula}",
+        "",
+        f"_cell_length_a                  {lat.get('a', 5.0):.6f}",
+        f"_cell_length_b                  {lat.get('b', 5.0):.6f}",
+        f"_cell_length_c                  {lat.get('c', 5.0):.6f}",
+        f"_cell_angle_alpha               {lat.get('alpha', 90.0):.4f}",
+        f"_cell_angle_beta                {lat.get('beta', 90.0):.4f}",
+        f"_cell_angle_gamma               {lat.get('gamma', 90.0):.4f}",
+        f"_cell_volume                    {lat.get('volume', 0.0):.4f}",
+        "",
+        f"_symmetry_space_group_name_H-M  '{sg}'",
+        f"_symmetry_cell_setting          {cs}",
+        "",
+        "loop_",
+        "_atom_site_label",
+        "_atom_site_type_symbol",
+        "_atom_site_fract_x",
+        "_atom_site_fract_y",
+        "_atom_site_fract_z",
+        "_atom_site_occupancy",
+    ]
+
+    for site in sites:
+        label = site.get("label", site.get("element", "X"))
+        el = site.get("element", "X")
+        x = site.get("x", 0.0)
+        y = site.get("y", 0.0)
+        z = site.get("z", 0.0)
+        occ = site.get("occupancy", 1.0)
+        lines.append(f"{label:<6s}  {el:<4s}  {x:.6f}  {y:.6f}  {z:.6f}  {occ:.4f}")
+
+    return "\n".join(lines) + "\n"
 
 
 # ── GET /api/export/pdf/{formula} ────────────────────────────────────────────

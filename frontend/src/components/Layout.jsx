@@ -32,6 +32,8 @@ export default function Layout() {
     toggleDarkMode();
     applyDarkMode(!darkMode);
   };
+
+  const handleLogout = () => {
     logout();
     toast("Signed out");
     navigate("/login");

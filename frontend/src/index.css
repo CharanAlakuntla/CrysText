@@ -3,19 +3,61 @@
 @tailwind utilities;
 
 @layer base {
+  /* ── Dark mode (default) ───────────────────── */
+  :root {
+    --bg: #0c0e12;
+    --nav-bg: rgba(16,20,30,0.8);
+    --card-bg: rgba(26,32,48,0.55);
+    --border: rgba(255,255,255,0.08);
+    --text: #f3f4f6;
+    --text-muted: #9ca3af;
+    --surface-800: #10141e;
+    --surface-700: #1a2030;
+  }
+
+  /* ── Light mode ────────────────────────────── */
+  html:not(.dark) {
+    --bg: #f1f5f9;
+    --nav-bg: rgba(255,255,255,0.9);
+    --card-bg: rgba(255,255,255,0.9);
+    --border: rgba(0,0,0,0.08);
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --surface-800: #e2e8f0;
+    --surface-700: #f8fafc;
+  }
+
   body {
     @apply font-sans antialiased;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-white/10 rounded-full;
-  }
+
+  /* Apply light mode bg overrides */
+  html:not(.dark) .bg-surface-900 { background-color: #f1f5f9 !important; }
+  html:not(.dark) .bg-surface-800\/80 { background-color: rgba(255,255,255,0.9) !important; }
+  html:not(.dark) .bg-surface-700\/50 { background-color: rgba(255,255,255,0.85) !important; }
+  html:not(.dark) .bg-surface-700\/40 { background-color: rgba(241,245,249,0.9) !important; }
+  html:not(.dark) .bg-surface-800\/60 { background-color: rgba(226,232,240,0.8) !important; }
+  html:not(.dark) .bg-surface-800 { background-color: #e2e8f0 !important; }
+  html:not(.dark) .bg-surface-900\/60 { background-color: rgba(241,245,249,0.8) !important; }
+
+  /* Text overrides in light mode */
+  html:not(.dark) .text-gray-100 { color: #0f172a !important; }
+  html:not(.dark) .text-gray-200 { color: #1e293b !important; }
+  html:not(.dark) .text-gray-300 { color: #334155 !important; }
+  html:not(.dark) .text-gray-400 { color: #475569 !important; }
+  html:not(.dark) .text-gray-500 { color: #64748b !important; }
+
+  /* Border overrides */
+  html:not(.dark) .border-white\/8 { border-color: rgba(0,0,0,0.08) !important; }
+  html:not(.dark) .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
+  html:not(.dark) .border-white\/5 { border-color: rgba(0,0,0,0.05) !important; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
 }
 
 @layer utilities {

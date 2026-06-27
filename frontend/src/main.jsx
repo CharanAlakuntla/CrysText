@@ -5,6 +5,16 @@ import { Toaster } from "react-hot-toast";
 import App from "./App";
 import "./index.css";
 
+// Apply dark mode class on initial load from persisted state
+try {
+  const stored = JSON.parse(localStorage.getItem("crystext-store") || "{}");
+  const isDark = stored?.state?.darkMode ?? true;
+  if (isDark) document.documentElement.classList.add("dark");
+  else document.documentElement.classList.remove("dark");
+} catch {
+  document.documentElement.classList.add("dark");
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { staleTime: 1000 * 60 * 5, retry: 1 },

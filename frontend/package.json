@@ -32,6 +32,6 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "serve dist -l $PORT"
+    "start": "serve dist -l $PORT --config serve.json"
   }
 }

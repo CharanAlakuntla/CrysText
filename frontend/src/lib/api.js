@@ -33,7 +33,7 @@ export const registerUser = (data) => api.post("/auth/register", data).then((r) 
 export const loginUser = (data) => api.post("/auth/login", data).then((r) => r.data);
 export const getMe = () => api.get("/auth/me").then((r) => r.data);
 
-export const getCifDownloadUrl = (formula) => `/api/download/cif/${formula}`;
-export const getPdfDownloadUrl = (formula) => `/api/export/pdf/${formula}`;
+export const getCifDownloadUrl = (formula) => `${import.meta.env.VITE_API_URL || ""}/api/download/cif/${encodeURIComponent(formula)}`;
+export const getPdfDownloadUrl = (formula) => `${import.meta.env.VITE_API_URL || ""}/api/export/pdf/${encodeURIComponent(formula)}`;
 
 export default api;

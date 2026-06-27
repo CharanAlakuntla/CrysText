@@ -11,7 +11,21 @@ db = None
 
 async def connect_db():
     global client, db
-    client = AsyncIOMotorClient(settings.mongodb_url)
+    # tlsCAFile=certifi handles Atlas SSL on all Python versions
+    try:
+        import certifi
+        client = AsyncIOMotorClient(
+            settings.mongodb_url,
+            tlsCAFile=certifi.where(),
+            serverSelectionTimeoutMS=30000,
+        )
+    except Exception:
+        client = AsyncIOMotorClient(
+            settings.mongodb_url,
+            serverSelectionTimeoutMS=30000,
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+        )
     db = client[settings.mongodb_db]
     await create_indexes()
     logger.info(f"Connected to MongoDB: {settings.mongodb_db}")
